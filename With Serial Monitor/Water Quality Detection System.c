@@ -5,6 +5,7 @@ void setup()
 { 
   Serial.begin(9600);
   pinMode(BuzzerPin,OUTPUT);
+  Serial.println("CORECHAMP");
    
 }
 void loop() {
