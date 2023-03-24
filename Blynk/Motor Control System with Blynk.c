@@ -83,6 +83,9 @@ void setup()
   //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
   // Setup a function to be called every second
   timer.setInterval(1000L, sendSensor);
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
 
 }
 
