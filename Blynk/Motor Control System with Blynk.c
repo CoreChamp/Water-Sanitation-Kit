@@ -31,7 +31,7 @@ ESP8266 wifi(&EspSerial);
 BlynkTimer timer;
 
 
-int motorpin = 3;
+int motorpin = 6;
 int motorstate = 0;
 
 void sendSensor()
