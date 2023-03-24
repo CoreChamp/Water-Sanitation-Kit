@@ -34,6 +34,10 @@ BlynkTimer timer;
 int motorpin = 6;
 int motorstate = 0;
 
+int redPin =7;
+int greenPin = A2;
+int bluePin = A3;
+
 void sendSensor()
 {
   motorstate = digitalRead(motorpin);
@@ -51,11 +55,17 @@ void sendSensor()
   if(motorstate == 1){
   lcd.print(0, 2, "Motor is On");  
   Serial.println("Motor is On");
+  digitalWrite(redPin,LOW);
+  digitalWrite(greenPin,HIGH);
+  digitalWrite(bluePin,LOW);
   delay(100);
   }
   else{
     lcd.print(1, 2, "Motor is Off");
     Serial.println("Motor is Off");
+    digitalWrite(redPin,HIGH);
+    digitalWrite(greenPin,LOW);
+    digitalWrite(bluePin,LOW);
     delay(100);
   }
 }
