@@ -79,10 +79,16 @@ static const uint8_t  PROGMEM image_data_20190410_114707[] = {
 };
 int sensorPin = A0;
 int BuzzerPin = 4;
+int redPin =7;
+int greenPin = A2;
+int bluePin = A3;
 void setup()
 { 
   Serial.begin(9600);
   pinMode(BuzzerPin,OUTPUT);
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
     // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
@@ -99,6 +105,7 @@ void setup()
   delay(2000); // Pause for 2 seconds
   // Clear the buffer.
   display.clearDisplay();
+  
 }
 void loop() {
   int sensorValue = analogRead(sensorPin);
@@ -116,8 +123,12 @@ void loop() {
   display.println(" Status :");
   display.setTextSize(1);
    display.println("  its CLEAR  ");
+    
   //  display.println("- time to water!");
     display.display();
+    digitalWrite(redPin,LOW);
+    digitalWrite(greenPin,HIGH);
+    digitalWrite(bluePin,LOW);
       delay(2000); // Pause for 2 seconds
   // Clear the buffer.
   display.clearDisplay();
@@ -135,8 +146,12 @@ void loop() {
   display.println(" Status :");
   display.setTextSize(1);
    display.println(" its CLOUDY ");
+   
   //  display.println("- time to water!");
     display.display();
+    digitalWrite(redPin,LOW);
+    digitalWrite(greenPin,LOW);
+    digitalWrite(bluePin,HIGH);
       delay(2000); // Pause for 2 seconds
   // Clear the buffer.
   display.clearDisplay();
@@ -153,6 +168,9 @@ void loop() {
    display.println(" its DIRTY ");
   //  display.println("- time to water!");
     display.display();
+    digitalWrite(redPin,HIGH);
+    digitalWrite(greenPin,LOW);
+    digitalWrite(bluePin,LOW);
       delay(2000); // Pause for 2 seconds
   // Clear the buffer.
   display.clearDisplay();
