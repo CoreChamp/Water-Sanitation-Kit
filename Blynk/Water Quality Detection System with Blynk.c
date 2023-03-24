@@ -30,6 +30,9 @@ BlynkTimer timer;
 
 int sensorPin = A0;
 int BuzzerPin = 4;
+int redPin =7;
+int greenPin = A2;
+int bluePin = A3;
 
 void sendSensor(){
 
@@ -50,11 +53,17 @@ void sendSensor(){
   if (turbidity < 20) {
     Serial.println("Water Quality Status: It's Clear");
     lcd.print(0, 1, "STATUS: CLEAR");
-      delay(500); 
+    digitalWrite(redPin,LOW);
+    digitalWrite(greenPin,HIGH);
+    digitalWrite(bluePin,LOW);
+    delay(500); 
   }
   if ((turbidity > 20) && (turbidity < 50)) {
     Serial.println("Water Quality Status: It's Cloudy");
     lcd.print(0, 1, "STATUS: CLOUDY"); 
+    digitalWrite(redPin,LOW);
+    digitalWrite(greenPin,LOW);
+    digitalWrite(bluePin,HIGH);
     delay(100);
     digitalWrite(BuzzerPin,HIGH);
     delay(1000);
@@ -66,6 +75,9 @@ void sendSensor(){
   digitalWrite(BuzzerPin,HIGH);
   Serial.println("Water Quality Status: It's Dirty");
   lcd.print(0, 1, "STATUS: DIRTY");
+  digitalWrite(redPin,HIGH);
+  digitalWrite(greenPin,LOW);
+  digitalWrite(bluePin,LOW);
   delay(500);
   }
 }
@@ -85,6 +97,9 @@ void setup() {
 
   Serial.begin(9600);
   pinMode(BuzzerPin,OUTPUT);
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
 }
 
 void loop() {
