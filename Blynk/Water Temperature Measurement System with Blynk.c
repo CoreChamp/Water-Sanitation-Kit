@@ -32,8 +32,8 @@ BlynkTimer timer;
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-// Data wire is plugged into digital pin 5 on the Arduino
-#define ONE_WIRE_BUS 5
+// Data wire is plugged into digital pin 13 on the Arduino
+#define ONE_WIRE_BUS 13
 
 // Setup a oneWire instance to communicate with any OneWire device
 OneWire oneWire(ONE_WIRE_BUS);  
