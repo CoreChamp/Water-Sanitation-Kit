@@ -1,3 +1,5 @@
+// First remove arduino nano led(pin 13) resistance
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
