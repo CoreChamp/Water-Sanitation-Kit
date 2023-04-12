@@ -1,3 +1,5 @@
+// First remove arduino nano led(pin 13) resistance
+
 #define BLYNK_TEMPLATE_ID "TMPLAQTecbqy"
 #define BLYNK_TEMPLATE_NAME "corechamp"
 #define BLYNK_AUTH_TOKEN "12VdYlEtCSGYq6buJWmmYKwy7EKDtX6n"
