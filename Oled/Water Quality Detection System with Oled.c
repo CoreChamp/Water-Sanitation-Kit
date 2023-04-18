@@ -1,3 +1,11 @@
+const float Gwater = 1.5;   //Good Quality Water Referance Value 
+const float Mwater = 0.8;   //Medauim Quality Water Referance Value 
+
+#define buzzer 4
+#define red 7
+#define green A3
+#define blue A2
+
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -77,19 +85,16 @@ static const uint8_t  PROGMEM image_data_20190410_114707[] = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
-int sensorPin = A0;
-int BuzzerPin = 4;
-int redPin =7;
-int greenPin = A2;
-int bluePin = A3;
-void setup()
-{ 
+void setup() {
+  pinMode(buzzer, OUTPUT);
+  pinMode(red,OUTPUT);
+  pinMode(green,OUTPUT);
+  pinMode(blue,OUTPUT);
+  // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
-  pinMode(BuzzerPin,OUTPUT);
-  pinMode(redPin, OUTPUT);
-  pinMode(greenPin, OUTPUT);
-  pinMode(bluePin, OUTPUT);
-    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  
+
+  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
@@ -102,77 +107,67 @@ void setup()
   // Draw bitmap on the screen
   display.drawBitmap(0, 0, image_data_20190410_114707, 128, 64, 1);
   display.display();
-  delay(2000); // Pause for 2 seconds
-  // Clear the buffer.
+  delay(2000);
   display.clearDisplay();
-  
+  display.setTextColor(WHITE);
+
 }
+
+// the loop routine runs over and over again forever:
 void loop() {
-  int sensorValue = analogRead(sensorPin);
-  Serial.println(sensorValue);
-  int turbidity = map(sensorValue, 0, 750, 100, 0);
+  // read the input on analog pin 0:
+  int sensorValue = analogRead(A0);
+  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
+  float voltage = sensorValue * (5.0 / 1023.0);
+  // print out the value you read:
+  Serial.println(voltage);
+
+
+  display.clearDisplay();
+  display.setCursor(10,1);
+  display.setTextSize(2);
+  display.print("CORECHAMP");
   delay(100);
-  Serial.print(turbidity);
-  delay(100);
-  if (turbidity < 20) {
-    display.setTextSize(2);             // Normal 1:1 pixel scale
-  display.setTextColor(SSD1306_WHITE);        // Draw white text
-  display.setCursor(10,0);             // Start at top-left corner
-  display.println(" Water ");
-  display.println(" Quality ");
-  display.println(" Status :");
-  display.setTextSize(1);
-   display.println("  its CLEAR  ");
-    
-  //  display.println("- time to water!");
-    display.display();
-    digitalWrite(redPin,LOW);
-    digitalWrite(greenPin,HIGH);
-    digitalWrite(bluePin,LOW);
-      delay(2000); // Pause for 2 seconds
-  // Clear the buffer.
-  display.clearDisplay();
-  }
-  if ((turbidity > 20) && (turbidity < 50)) {
-    digitalWrite(BuzzerPin,HIGH);
-    delay(1000);
-    digitalWrite(BuzzerPin,LOW);
-    delay(1000);
-        display.setTextSize(2);             // Normal 1:1 pixel scale
-  display.setTextColor(SSD1306_WHITE);        // Draw white text
-  display.setCursor(10,0);             // Start at top-left corner
-    display.println(" Water ");
-  display.println(" Quality ");
-  display.println(" Status :");
-  display.setTextSize(1);
-   display.println(" its CLOUDY ");
-   
-  //  display.println("- time to water!");
-    display.display();
-    digitalWrite(redPin,LOW);
-    digitalWrite(greenPin,LOW);
-    digitalWrite(bluePin,HIGH);
-      delay(2000); // Pause for 2 seconds
-  // Clear the buffer.
-  display.clearDisplay();
-  }
-  if (turbidity > 50) {
-  digitalWrite(BuzzerPin,HIGH);
-  display.setTextSize(2);             // Normal 1:1 pixel scale
-  display.setTextColor(SSD1306_WHITE);        // Draw white text
-  display.setCursor(10,0);             // Start at top-left corner
-    display.println(" Water ");
-  display.println(" Quality ");
-  display.println(" Status :");
-  display.setTextSize(1);
-   display.println(" its DIRTY ");
-  //  display.println("- time to water!");
-    display.display();
-    digitalWrite(redPin,HIGH);
-    digitalWrite(greenPin,LOW);
-    digitalWrite(bluePin,LOW);
-      delay(2000); // Pause for 2 seconds
-  // Clear the buffer.
-  display.clearDisplay();
-  }
+ 
+    if (voltage >= Gwater) {
+    Serial.println("Good Quality Water");
+    digitalWrite(buzzer,LOW);
+    digitalWrite(red,LOW);
+    digitalWrite(green,HIGH);
+    digitalWrite(blue,LOW);
+    display.setCursor(40,25);
+    display.setTextSize(2);
+    display.print("Good");
+    display.setCursor(25,50);
+    display.setTextSize(1);
+    display.print("Quality Water");
+    delay(100);
+  }  if (voltage < Gwater && voltage > Mwater) {
+    Serial.println("Medium Quality Water");
+    digitalWrite(buzzer,LOW);
+    digitalWrite(red,LOW);
+    digitalWrite(green,LOW);
+    digitalWrite(blue,HIGH);
+    display.setCursor(30,25);
+    display.setTextSize(2);
+    display.print("Medium");
+    display.setCursor(25,50);
+    display.setTextSize(1);
+    display.print("Quality Water");
+    delay(100);
+  } if (voltage < Mwater) {
+    Serial.println("Bad Quality Water");
+    digitalWrite(buzzer,HIGH);
+    digitalWrite(red,HIGH);
+    digitalWrite(green,LOW);
+    digitalWrite(blue,LOW);
+    display.setCursor(43,25);
+    display.setTextSize(2);
+    display.print("Bad");
+    display.setCursor(25,50);
+    display.setTextSize(1);
+    display.print("Quality Water");
+    delay(100);
+} 
+display.display();
 }
